@@ -1,4 +1,5 @@
 import random
+import string
 
 #open text file of words, save as a list and randomly select a word for play
 with open("words.txt", "r") as word_obj:
@@ -6,41 +7,48 @@ with open("words.txt", "r") as word_obj:
     words = contents.split()
     play_word = random.choice(words)
 
-#creat blanks for letters to fill in for guesses
-
-
-
-
-#check if guessed letter is in the play word
 print(play_word)
 
-##def new_game():
 letters_list = list(play_word)
 result = ["_"] * len(letters_list)
-while letters_list != result:
-    guess = input("Guess a letter: ").lower()
-    print(letters_list, result)
-    if guess in letters_list:
-        print("you guessed a letter!")
-    ##  FOR LOOP WILL ONLY REPLACE FIRST MATCH OF CHAR -- DONT USE!
-    ##    for char in letters_list:
-    ##        if char == guess:
-    ##            i = letters_list.index(guess)
-    ##            result[i] = guess
 
-    ## EMUMERATE METHOD WILL FIND ALL INSTANCES OF CHAR
+print("Your new word has " + str(len(letters_list)) +" letters.")
+alpha = list(string.ascii_lowercase)
+def remaining_letters(used):
+        alpha.remove(used)
+        return alpha
+ 
+count = 6
+while letters_list != result:
+    print("\nHere are the letters you have to choose from:")
+    for letter in alpha:
+        print (letter, end="")
+    guess = input("\n\nGuess a letter: ").lower()
+    if guess in alpha:
+        remaining_letters(guess)
+    else:
+        print("\nOK DING-DONG! You have already used that letter -- try again!")
+        continue
+        
+    if guess in letters_list:
+        print("\nCorrect! You guessed a letter!\n")
+
         for index, char in enumerate(letters_list):
             if char == guess:
-                print(index)
                 result[index] = guess
-        print (result)
-    else:
-        print("That letter is not in the word. Try Again!")
-print("YOU WON!")
-            
+        for char in result:
+            print (char, end=" ",)
+        print("\n")
 
-
-##new_game()
+    elif count > 0:
+        print("\nThat letter is not in the word. Try Again!")
+        count -= 1
+    elif count == 0:
+        print ("\nHANGMAN!")
+        print("The word was: " + play_word)
+        break
+if letters_list == result:
+    print("YOU WON!")   
 
   
 
